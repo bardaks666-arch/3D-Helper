@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Hub</title>
+    <title>3D Hub Pro</title>
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <style>
         :root {
@@ -13,16 +13,15 @@
             --accent-color: #007aff;
             --danger-color: #ff453a;
             --success-color: #32d74b;
+            --warning-color: #ff9f0a;
             --input-bg: #2c2c2e;
             --nav-bg: #121212;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0; padding: 0;
-            display: flex; flex-direction: column;
+            background-color: var(--bg-color); color: var(--text-color);
+            margin: 0; padding: 0; display: flex; flex-direction: column;
             height: 100vh; overflow: hidden;
         }
 
@@ -35,7 +34,7 @@
             position: fixed; bottom: 0; width: 100%; height: 70px;
             background: var(--nav-bg); border-top: 1px solid #333;
             display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: env(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom); z-index: 100;
         }
         .tab-item {
             display: flex; flex-direction: column; align-items: center;
@@ -44,9 +43,11 @@
         .tab-item.active { color: var(--accent-color); }
         .tab-icon { font-size: 22px; margin-bottom: 4px; }
 
-        /* Стили калькулятора (как были) */
-        .container-box { background: var(--card-bg); padding: 20px; border-radius: 20px; box-sizing: border-box; }
+        /* Общие стили карточек */
+        .container-box { background: var(--card-bg); padding: 20px; border-radius: 20px; box-sizing: border-box; margin-bottom: 15px; }
         h2 { text-align: center; margin-bottom: 25px; font-weight: 600; margin-top: 0; }
+        
+        /* Стили калькулятора */
         .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 14px; margin-bottom: 8px; color: #8e8e93; }
         input, select {
@@ -59,21 +60,42 @@
             width: 100%; height: 50px; margin-top: 10px; border: none;
             border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 16px;
         }
-        .btn-main { background-color: var(--accent-color); color: white; margin-top: 20px; }
-        .btn-save { background-color: var(--success-color); color: white; }
-        .btn-delete { background-color: var(--danger-color); color: white; }
-        .btn-edit { background-color: #545456; color: white; }
-
+        .btn-main { background-color: var(--accent-color); color: white; }
+        
         .printer-info {
             font-size: 13px; color: var(--accent-color); text-align: center;
             margin-bottom: 20px; background: rgba(0, 122, 255, 0.1); padding: 10px; border-radius: 10px;
         }
         #result { margin-top: 25px; padding: 20px; background: #2c2c2e; border-radius: 16px; line-height: 1.6; }
-        .sale-price { margin-top: 15px; padding-top: 15px; border-top: 1px solid #48484a; color: var(--success-color); font-size: 18px; font-weight: bold; }
-        
+
         /* Стили Гайдов */
-        .guide-card { background: var(--card-bg); padding: 15px; border-radius: 14px; margin-bottom: 12px; display: flex; align-items: center; border: 1px solid #333; }
-        .guide-icon { font-size: 24px; margin-right: 15px; }
+        .guide-item { 
+            background: var(--card-bg); padding: 15px; border-radius: 16px; 
+            margin-bottom: 12px; display: flex; align-items: center; cursor: pointer;
+            border: 1px solid #333; transition: 0.2s;
+        }
+        .guide-item:active { background: #2c2c2e; }
+        .guide-icon-circle { 
+            width: 40px; height: 40px; background: #3a3a3c; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 20px;
+        }
+
+        /* Оформление статьи гайда */
+        .guide-content { display: none; }
+        .guide-content.active { display: block; }
+        .back-btn { color: var(--accent-color); margin-bottom: 15px; cursor: pointer; display: inline-block; }
+        .status-box { padding: 12px; border-radius: 12px; margin-bottom: 10px; font-size: 14px; }
+        .status-ideal { background: rgba(50, 215, 75, 0.15); border: 1px solid var(--success-color); color: #d1ffd6; }
+        .status-high { background: rgba(255, 159, 10, 0.15); border: 1px solid var(--warning-color); color: #fff1d6; }
+        .status-low { background: rgba(255, 69, 58, 0.15); border: 1px solid var(--danger-color); color: #ffd6d6; }
+        
+        .video-container { 
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
+            border-radius: 14px; background: #000; margin-bottom: 15px;
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
+        .tip-box { background: #3a3a3c; padding: 15px; border-radius: 12px; font-size: 14px; border-left: 4px solid var(--accent-color); }
     </style>
 </head>
 <body>
@@ -115,19 +137,54 @@
         </div>
 
         <div id="page-guides" class="page">
-            <h2>База знаний</h2>
-            <div class="guide-card">
-                <span class="guide-icon">📽</span>
-                <div>
-                    <div style="font-weight:bold;">Видео-гайды</div>
-                    <div style="font-size:12px; color:#8e8e93;">Раздел в разработке...</div>
+            <div id="guide-list">
+                <h2>База знаний</h2>
+                <div class="guide-item" onclick="openGuide('guide-zoffset')">
+                    <div class="guide-icon-circle">🎯</div>
+                    <div>
+                        <div style="font-weight:bold;">Настройка Z-offset</div>
+                        <div style="font-size:12px; color:#8e8e93;">Самая важная калибровка</div>
+                    </div>
                 </div>
-            </div>
-            <div class="guide-card">
-                <span class="guide-icon">🧪</span>
-                <div>
-                    <div style="font-weight:bold;">Свойства пластиков</div>
-                    <div style="font-size:12px; color:#8e8e93;">Таблицы температур и усадки</div>
+                </div>
+
+            <div id="guide-zoffset" class="guide-content">
+                <div class="back-btn" onclick="closeGuide()">← Назад к списку</div>
+                <div class="container-box">
+                    <h3 style="margin-top:0;">Настройка Z-offset</h3>
+                    <p style="font-size:14px; color:#8e8e93;">Z-offset — это расстояние между кончиком сопла и печатным столом.</p>
+                    
+                    <label>Как настроить:</label>
+                    <ol style="font-size:14px; padding-left:20px; line-height:1.5;">
+                        <li>Запустите печать тестового первого слоя.</li>
+                        <li>Прямо во время печати заходите в меню принтера "BabyStep" или "Z-Offset".</li>
+                        <li>Меняйте значение шагами по 0.01 или 0.05 мм.</li>
+                    </ol>
+
+                    <label>Визуальные признаки:</label>
+                    <div class="status-box status-ideal">
+                        <b>✅ ИДЕАЛ:</b> Линии сплющены, щелей между ними нет, поверхность гладкая.
+                    </div>
+                    <div class="status-box status-high">
+                        <b>⚠️ ВЫСОКО:</b> Линии круглые (как макаронины), не липнут к столу, видны просветы.
+                    </div>
+                    <div class="status-box status-low">
+                        <b>❌ НИЗКО:</b> Сопло скребёт по столу, пластик почти не выходит или "размазывается" прозрачным слоем.
+                    </div>
+
+                    <div class="tip-box" style="margin: 15px 0;">
+                        <b>Лайфхак:</b> Проведите пальцем по напечатанной линии. Если она легко отрывается — сопло слишком высоко.
+                    </div>
+
+                    <label>Видео-инструкции:</label>
+                    <div class="video-container">
+                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239019&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-container">
+                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239020&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                    </div>
+
+                    <p style="font-size:12px; color:var(--danger-color); text-align:center;"><b>Важно:</b> Настраивайте Z-offset только после механического выравнивания углов стола!</p>
                 </div>
             </div>
         </div>
@@ -138,17 +195,17 @@
                 <label>Принтер</label>
                 <select id="edit-printer-select" onchange="saveSelection()"></select>
                 <div class="row" style="margin-bottom:25px;">
-                    <button class="btn-edit" onclick="showEditor('printer', true)">Изм.</button>
+                    <button style="background:#545456; color:white;" onclick="showEditor('printer', true)">Изм.</button>
                     <button style="background:#3a3a3c; color:white;" onclick="showEditor('printer', null)">+</button>
-                    <button class="btn-delete" onclick="deleteItem('printer')">Удл.</button>
+                    <button style="background:var(--danger-color); color:white;" onclick="deleteItem('printer')">Удл.</button>
                 </div>
 
                 <label>Филамент</label>
                 <select id="edit-filament-select" onchange="saveSelection()"></select>
                 <div class="row">
-                    <button class="btn-edit" onclick="showEditor('filament', true)">Изм.</button>
+                    <button style="background:#545456; color:white;" onclick="showEditor('filament', true)">Изм.</button>
                     <button style="background:#3a3a3c; color:white;" onclick="showEditor('filament', null)">+</button>
-                    <button class="btn-delete" onclick="deleteItem('filament')">Удл.</button>
+                    <button style="background:var(--danger-color); color:white;" onclick="deleteItem('filament')">Удл.</button>
                 </div>
             </div>
         </div>
@@ -157,7 +214,7 @@
             <div class="container-box">
                 <h2 id="editor-title">Редактор</h2>
                 <div id="editor-fields"></div>
-                <button class="btn-save" onclick="saveEditor()">Сохранить</button>
+                <button style="background:var(--success-color); color:white;" onclick="saveEditor()">Сохранить</button>
                 <button style="background:#3a3a3c; color:white;" onclick="switchPage('page-settings', document.querySelector('.tab-item:last-child'))">Отмена</button>
             </div>
         </div>
@@ -192,16 +249,28 @@
         document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         if (el) el.classList.add('active');
+        closeGuide(); // Сбрасываем открытый гайд при смене вкладок
+    }
+
+    function openGuide(guideId) {
+        document.getElementById('guide-list').style.display = 'none';
+        document.getElementById(guideId).classList.add('active');
+    }
+
+    function closeGuide() {
+        document.querySelectorAll('.guide-content').forEach(g => g.classList.remove('active'));
+        const list = document.getElementById('guide-list');
+        if (list) list.style.display = 'block';
     }
 
     function loadFromStorage() {
-        const saved = localStorage.getItem('3d_hub_data_v5');
+        const saved = localStorage.getItem('3d_hub_v6_full');
         if (saved) data = JSON.parse(saved);
         updateUI();
     }
 
     function saveToStorage() {
-        localStorage.setItem('3d_hub_data_v5', JSON.stringify(data));
+        localStorage.setItem('3d_hub_v6_full', JSON.stringify(data));
         updateUI();
     }
 
