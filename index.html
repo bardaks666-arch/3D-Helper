@@ -295,6 +295,33 @@
             font-size: 12px;
             color: #8e8e93;
         }
+        
+        .info-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        .warning-text {
+            background: rgba(255, 159, 10, 0.15);
+            padding: 12px;
+            border-radius: 12px;
+            border-left: 3px solid var(--warning-color);
+            margin: 15px 0;
+            font-size: 13px;
+        }
+        .success-badge {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        .danger-badge {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        .accent-badge {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -534,7 +561,7 @@
                     <p style="font-size:13px; color:#ccc;">— вынуть флешку<br>— перезагрузить принтер<br>— сброс настроек<br>— калибровка стола<br>— настройка Z-offset</p>
                     <label>Видео-инструкция:</label>
                     <div class="video-container">
-                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239017&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239017&hd=2&autoplay=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -542,22 +569,60 @@
             <div id="guide-zoffset" class="guide-content">
                 <div class="back-btn" onclick="showCategory('cat-flashforge')">← К списку FF</div>
                 <div class="container-box">
-                    <h3 style="margin-top:0;">Настройка Z-offset</h3>
-                    <p style="font-size:14px;">Расстояние между соплом и столом.</p>
-                    <label>Настройка:</label>
-                    <ol style="font-size:14px; padding-left:20px; line-height:1.5;">
-                        <li>Запусти печать первого слоя</li>
-                        <li>Во время печати меняй Z-offset</li>
+                    <h3 style="margin-top:0; font-size: 20px;">Z-offset (смещение по Z)</h3>
+                    
+                    <p class="info-text">
+                        Определяет расстояние между соплом и столом в первом слое.<br>
+                        <strong>Это ключевая настройка адгезии и качества первого слоя.</strong>
+                    </p>
+                    
+                    <label>Как настроить (самый правильный способ):</label>
+                    <ol style="font-size:14px; padding-left:20px; line-height:1.5; margin-bottom: 15px;">
+                        <li><strong>Запусти тест первого слоя</strong><br>создать примитив (модель) 50×50×0,2 (толщина слоя)</li>
+                        <li><strong>Во время печати меняй Z-offset</strong><br>меняй положение сопла относительно стола</li>
                     </ol>
-                    <label>Как понять:</label>
-                    <div style="font-size:13px; margin-bottom:15px; line-height:1.6;">
-                        <b style="color:var(--success-color);">ИДЕАЛ:</b> Линии сплющены, нет щелей.<br>
-                        <b style="color:var(--warning-color);">Слишком высоко:</b> Линии круглые, не липнет.<br>
-                        <b style="color:var(--danger-color);">Слишком низко:</b> Сопло скребёт, пластик "мазывается".
+                    
+                    <label>Как выглядит правильный первый слой:</label>
+                    <ul style="font-size:14px; padding-left:20px; line-height:1.5; margin-bottom: 15px; color: var(--success-color);">
+                        <li>Линии слегка приплюснуты</li>
+                        <li>Нет зазоров между линиями</li>
+                        <li>Поверхность ровная, без борозд</li>
+                    </ul>
+                    
+                    <label>Признаки неправильного Z-offset:</label>
+                    
+                    <div class="warning-text">
+                        <strong class="danger-badge">⚠️ Слишком высоко (сопло далеко):</strong><br>
+                        • Линии круглые, не прижаты<br>
+                        • Есть щели между линиями<br>
+                        • Плохая адгезия (отлипает)
                     </div>
+                    
+                    <div class="warning-text" style="border-left-color: var(--danger-color);">
+                        <strong class="danger-badge">⚠️ Слишком низко (сопло слишком близко):</strong><br>
+                        • Пластик "размазывается"<br>
+                        • Поверхность волнистая<br>
+                        • Могут быть пропуски/царапины<br>
+                        • Сопло может скрести стол
+                    </div>
+                    
+                    <label>Как двигать:</label>
+                    <ul style="font-size:14px; padding-left:20px; line-height:1.5; margin-bottom: 15px;">
+                        <li>Если не липнет → <strong class="accent-badge">опусти сопло</strong> (уменьши Z-offset, например -0.05)</li>
+                        <li>Если "давит" → <strong class="accent-badge">подними сопло</strong> (+0.05)</li>
+                    </ul>
+                    
+                    <div style="background:#3a3a3c; padding:12px; border-radius:12px; font-size:13px; margin-bottom:20px; border-left:4px solid var(--accent-color);">
+                        <strong>👉 Двигай маленькими шагами:</strong> 0.01–0.005 мм
+                    </div>
+                    
                     <label>Видео часть 1:</label>
                     <div class="video-container">
-                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239019&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239019&hd=2&autoplay=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <label>Видео часть 2:</label>
+                    <div class="video-container">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-157472376&id=456239020&hd=2&autoplay=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
