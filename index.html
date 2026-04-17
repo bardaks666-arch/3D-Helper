@@ -19,88 +19,395 @@
             height: 100vh; overflow: hidden;
         }
 
-        .content { flex: 1; overflow-y: auto; padding: 20px 15px 100px 15px; }
-        .page { display: none; width: 100%; max-width: 450px; margin: 0 auto; }
-        .page.active { display: block; }
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 15px 100px 15px;
+        }
 
-        /* Навигация */
-        .tab-bar {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: var(--nav-bg); border-top: 1px solid #333;
-            display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: env(safe-area-inset-bottom); z-index: 100;
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
         }
-        .tab-item {
-            display: flex; flex-direction: column; align-items: center;
-            color: #8e8e93; text-decoration: none; font-size: 11px; cursor: pointer;
+
+        .page.active {
+            display: block;
         }
-        .tab-item.active { color: var(--accent-color); }
-        .tab-icon { font-size: 22px; margin-bottom: 4px; }
+
+        /* Главное меню (крупные значки) */
+        .main-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .menu-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.2s ease;
+            border: 1px solid #2c2c2e;
+        }
+        .menu-card:active {
+            transform: scale(0.98);
+            background: #2a2a2c;
+        }
+        .menu-icon {
+            font-size: 52px;
+            width: 70px;
+            text-align: center;
+        }
+        .menu-text {
+            flex: 1;
+        }
+        .menu-text h2 {
+            margin: 0 0 6px 0;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .menu-text p {
+            margin: 0;
+            font-size: 14px;
+            color: #8e8e93;
+        }
 
         /* Карточки */
-        .container-box { background: var(--card-bg); padding: 20px; border-radius: 20px; box-sizing: border-box; margin-bottom: 15px; }
-        h2 { text-align: center; margin-bottom: 25px; font-weight: 600; margin-top: 0; }
-        label { display: block; font-size: 14px; margin-bottom: 8px; color: #8e8e93; }
+        .container-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            margin-top: 0;
+        }
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #8e8e93;
+            margin: 20px 0 10px 10px;
+            letter-spacing: 1px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #8e8e93;
+        }
+        
         input, select {
-            width: 100%; height: 44px; padding: 10px 15px; border-radius: 12px;
-            border: none; background: var(--input-bg); color: white; font-size: 16px; box-sizing: border-box;
+            width: 100%;
+            height: 44px;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: none;
+            background: var(--input-bg);
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
         }
-        .row { display: flex; gap: 12px; }
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+        .row-slim {
+            display: flex;
+            gap: 10px;
+        }
+        .row-slim > div {
+            flex: 1;
+        }
         button {
-            width: 100%; height: 50px; margin-top: 10px; border: none;
-            border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 16px;
+            width: 100%;
+            height: 50px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
         }
-        .btn-main { background-color: var(--accent-color); color: white; }
+        .btn-main {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #3a3a3c;
+            color: white;
+        }
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        .btn-settings {
+            background-color: #2c2c2e;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+        
         .printer-info {
-            font-size: 13px; color: var(--accent-color); text-align: center;
-            margin-bottom: 20px; background: rgba(0, 122, 255, 0.1); padding: 10px; border-radius: 10px;
+            font-size: 13px;
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(0, 122, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
         }
-        #result { margin-top: 25px; padding: 20px; background: #2c2c2e; border-radius: 16px; line-height: 1.6; }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #2c2c2e;
+            border-radius: 16px;
+            line-height: 1.6;
+        }
 
         /* Гайды */
-        .guide-item { 
-            background: var(--card-bg); padding: 15px; border-radius: 16px; 
-            margin-bottom: 12px; display: flex; align-items: center; cursor: pointer;
+        .guide-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
             border: 1px solid #333;
         }
-        .guide-icon-circle { 
-            width: 40px; height: 40px; background: #3a3a3c; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 20px;
+        .guide-icon-circle {
+            width: 40px;
+            height: 40px;
+            background: #3a3a3c;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
         }
-        .guide-content { display: none; }
-        .guide-content.active { display: block; }
-        .back-btn { color: var(--accent-color); margin-bottom: 15px; cursor: pointer; display: inline-block; font-weight: 500; }
-        
-        .status-box { padding: 12px; border-radius: 12px; margin-bottom: 10px; font-size: 14px; }
-        .status-error { background: rgba(255, 69, 58, 0.15); border: 1px solid var(--danger-color); }
-        
-        .video-container { 
-            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
-            border-radius: 14px; background: #000; margin: 15px 0;
+        .guide-content {
+            display: none;
         }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .guide-content.active {
+            display: block;
+        }
+        .back-btn {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .status-box {
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .status-error {
+            background: rgba(255, 69, 58, 0.15);
+            border: 1px solid var(--danger-color);
+            color: #ffd6d6;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #000;
+            margin: 10px 0 20px 0;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        .compact-label {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .settings-panel {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+        .settings-panel h3 {
+            font-size: 16px;
+            margin: 0 0 12px 0;
+            color: #8e8e93;
+        }
+        
+        .inline-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .inline-buttons button {
+            flex: 1;
+            margin-top: 0;
+            height: 40px;
+            font-size: 14px;
+        }
+        
+        .list-item {
+            background: var(--input-bg);
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .list-item.selected {
+            border: 1px solid var(--accent-color);
+            background: rgba(0, 122, 255, 0.15);
+        }
+        .list-item-info {
+            flex: 1;
+        }
+        .list-item-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .list-item-desc {
+            font-size: 12px;
+            color: #8e8e93;
+        }
     </style>
 </head>
 <body>
 
     <div class="content">
-        <div id="page-calc" class="page active">
+        <!-- Главный экран с крупными значками -->
+        <div id="page-main" class="page active">
+            <div class="main-menu">
+                <div class="menu-card" onclick="switchPage('page-calc', null)">
+                    <div class="menu-icon">🖨️</div>
+                    <div class="menu-text">
+                        <h2>Калькулятор</h2>
+                        <p>Расчет стоимости печати</p>
+                    </div>
+                </div>
+                <div class="menu-card" onclick="switchPage('page-guides', null)">
+                    <div class="menu-icon">📚</div>
+                    <div class="menu-text">
+                        <h2>Гайды</h2>
+                        <p>Инструкции и калибровка</p>
+                    </div>
+                </div>
+                <div class="menu-card" onclick="showMainSettings()">
+                    <div class="menu-icon">⚙️</div>
+                    <div class="menu-text">
+                        <h2>Настройки</h2>
+                        <p>Дополнительные параметры</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Страница калькулятора -->
+        <div id="page-calc" class="page">
             <div class="container-box">
+                <div class="back-btn" onclick="switchPage('page-main', null)">← На главную</div>
                 <h2>3D Калькулятор</h2>
-                <div class="input-group"><label>Филамент</label><select id="filament-select" onchange="saveSelection()"></select></div>
-                <div class="input-group"><label>Вес модели (г)</label><input type="number" id="weight" placeholder="0" inputmode="decimal"></div>
-                <div class="input-group"><label>Время печати</label><div class="row"><input type="number" id="hours" placeholder="Ч"><input type="number" id="mins" placeholder="Мин"></div></div>
-                <div id="printer-display" class="printer-info"></div>
-                <div class="input-group"><label>Электричество (руб/кВт·ч)</label><input type="number" id="elec-price" step="0.1"></div>
-                <div class="input-group"><label>Амортизация (%)</label><div class="row"><input type="number" id="extra-cost" placeholder="Доп. руб" value="0"><input type="number" id="amort-perc" value="20"></div></div>
+                
+                <!-- Выбор принтера -->
+                <div class="input-group">
+                    <label>🖨️ Принтер</label>
+                    <select id="edit-printer-select" onchange="saveSelection()"></select>
+                </div>
+                
+                <!-- Выбор филамента -->
+                <div class="input-group">
+                    <label>🧵 Филамент</label>
+                    <select id="filament-select" onchange="saveSelection()"></select>
+                </div>
+                
+                <!-- Кнопка настройки (ведет на отдельный экран) -->
+                <button class="btn-settings" onclick="switchPage('page-manage', null)">⚙️ Настройки (филамент/принтер)</button>
+                
+                <div class="settings-panel">
+                    <h3>📊 Параметры расчета</h3>
+                    <div class="input-group"><label>Количество моделей</label><input type="number" id="quantity" value="1" min="1" placeholder="1" inputmode="decimal"></div>
+                    <div class="input-group"><label>Вес одной модели (г)</label><input type="number" id="weight" placeholder="0" inputmode="decimal"></div>
+                    <div class="input-group"><label>Время печати одной модели</label><div class="row"><input type="number" id="hours" placeholder="Ч"><input type="number" id="mins" placeholder="Мин"></div></div>
+                    <div id="printer-display" class="printer-info"></div>
+                    <div class="input-group"><label>Электричество (руб/кВт·ч)</label><input type="number" id="elec-price" step="0.1"></div>
+                    
+                    <div class="row-slim">
+                        <div>
+                            <label class="compact-label">Доп. расходы (руб)</label>
+                            <input type="number" id="extra-cost" placeholder="0" value="0" step="any">
+                        </div>
+                        <div>
+                            <label class="compact-label">Амортизация (%)</label>
+                            <input type="number" id="amort-perc" value="20" step="any">
+                        </div>
+                    </div>
+                </div>
+                
                 <button class="btn-main" onclick="calculate()">Рассчитать</button>
                 <div id="result" style="display:none;"></div>
             </div>
         </div>
 
+        <!-- Страница управления принтерами и филаментами -->
+        <div id="page-manage" class="page">
+            <div class="container-box">
+                <div class="back-btn" onclick="switchPage('page-calc', null)">← К калькулятору</div>
+                <h2>Управление</h2>
+                
+                <!-- Принтеры -->
+                <div class="settings-panel">
+                    <h3>🖨️ Принтеры</h3>
+                    <div id="printers-list"></div>
+                    <div class="inline-buttons">
+                        <button class="btn-secondary" onclick="showEditor('printer', null)">+ Добавить</button>
+                        <button class="btn-danger" onclick="deleteItem('printer')">Удалить выбранный</button>
+                    </div>
+                </div>
+                
+                <!-- Филаменты -->
+                <div class="settings-panel">
+                    <h3>🧵 Филаменты</h3>
+                    <div id="filaments-list"></div>
+                    <div class="inline-buttons">
+                        <button class="btn-secondary" onclick="showEditor('filament', null)">+ Добавить</button>
+                        <button class="btn-danger" onclick="deleteItem('filament')">Удалить выбранный</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Страница гайдов -->
         <div id="page-guides" class="page">
+            <div class="back-btn" onclick="switchPage('page-main', null)">← На главную</div>
             <div id="guide-categories">
                 <h2>База знаний</h2>
+                
+                <div class="section-title">Принтеры</div>
                 <div class="guide-item" onclick="showCategory('cat-flashforge')">
                     <div class="guide-icon-circle">⚡</div>
                     <div><div style="font-weight:bold;">FlashForge</div><div style="font-size:12px; color:#8e8e93;">AD5X / 5M / 5M Pro</div></div>
@@ -109,10 +416,16 @@
                     <div class="guide-icon-circle">🐻</div>
                     <div><div style="font-weight:bold;">Flying Bear</div><div style="font-size:12px; color:#8e8e93;">Reborn 3</div></div>
                 </div>
+
+                <div class="section-title">Материалы</div>
+                <div class="guide-item" onclick="showCategory('cat-filament-calib')">
+                    <div class="guide-icon-circle">🌡️</div>
+                    <div><div style="font-weight:bold;">Калибровка филамента</div><div style="font-size:12px; color:#8e8e93;">Температура, поток и др.</div></div>
+                </div>
             </div>
 
             <div id="cat-flashforge" class="guide-content">
-                <div class="back-btn" onclick="showCategory('main')">← К выбору принтера</div>
+                <div class="back-btn" onclick="showCategory('main')">← Назад</div>
                 <h2>FlashForge Гайды</h2>
                 <div class="guide-item" onclick="openGuide('guide-ff-firmware')">
                     <div class="guide-icon-circle">💾</div>
@@ -125,9 +438,83 @@
             </div>
 
             <div id="cat-reborn" class="guide-content">
-                <div class="back-btn" onclick="showCategory('main')">← К выбору принтера</div>
+                <div class="back-btn" onclick="showCategory('main')">← Назад</div>
                 <h2>Reborn 3 Гайды</h2>
-                <p style="text-align:center; color:#8e8e93;">Раздел скоро будет наполнен...</p>
+                <p style="text-align:center; color:#8e8e93; margin-top:40px;">Раздел скоро будет наполнен...</p>
+            </div>
+
+            <div id="cat-filament-calib" class="guide-content">
+                <div class="back-btn" onclick="showCategory('main')">← Назад</div>
+                <h2>Калибровка филамента</h2>
+                <div class="guide-item" onclick="openGuide('guide-temp-tower')">
+                    <div class="guide-icon-circle">🗼</div>
+                    <div><div style="font-weight:bold;">Температурная башня</div><div style="font-size:12px; color:#8e8e93;">Поиск оптимальной температуры</div></div>
+                </div>
+            </div>
+
+            <div id="guide-temp-tower" class="guide-content">
+                <div class="back-btn" onclick="showCategory('cat-filament-calib')">← К калибровкам</div>
+                <div class="container-box">
+                    <h3 style="margin-top:0; font-size: 18px;">Калибровка температуры печати для филамента(прутка) - Температурная башня</h3>
+                    
+                    <p style="font-size:14px; color:#ccc; margin-bottom: 15px;">
+                        Помогает подобрать оптимальную температуру печати (баланс прочности и качества).
+                    </p>
+                    
+                    <label>Как запустить в OrcaSlicer:</label>
+                    <ul style="font-size:14px; padding-left:20px; line-height:1.5; margin-bottom: 15px;">
+                        <li>Калибровка (Calibration) → Температурная башня (Temperature Tower)</li>
+                        <li>Выбери материал (PLA, PETG и т.д.)</li>
+                        <li>Слайсер создаст модель с разной температурой по высоте</li>
+                    </ul>
+
+                    <label>Как оценивать:</label>
+                    <p style="font-size:13px; margin-bottom:8px;">Смотри на каждый "этаж" и ищи баланс:</p>
+                    <ul style="font-size:13px; padding-left:20px; line-height:1.6; margin-bottom: 15px;">
+                        <li>Прочность (не ломается легко)</li>
+                        <li>Минимум нитей (stringing)</li>
+                        <li>Чистые нависания и мосты</li>
+                    </ul>
+
+                    <label>Как выбрать температуру:</label>
+                    <p style="font-size:13px; margin-bottom:15px; line-height:1.6;">
+                        Бери не самый красивый и не самый прочный этаж, а тот, где все показатели в балансе.
+                    </p>
+
+                    <label>Признаки:</label>
+                    <div style="font-size:13px; margin-bottom:15px; line-height:1.6;">
+                        • <b>Слишком высокая температура</b> → сопли, блеск, много нитей<br>
+                        • <b>Слишком низкая температура</b> → плохая прочность, шероховатость
+                    </div>
+
+                    <div style="background:#3a3a3c; padding:12px; border-radius:12px; font-size:13px; margin-bottom:20px; border-left:4px solid var(--accent-color);">
+                        <b>Важно:</b><br>
+                        Шаг температуры: ~5°C<br>
+                        Печатай с тем же обдувом, что и обычные детали
+                    </div>
+
+                    <label>Видео часть 1:</label>
+                    <div class="video-container">
+                        <iframe 
+                            src="https://rutube.ru/play/embed/98a014cb34b6837e790012f167e09951?p=f300m0UVw-sanWsOl8uTcQ&autoplay=false"
+                            loading="lazy"
+                            allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture;"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <label>Видео часть 2:</label>
+                    <div class="video-container">
+                        <iframe 
+                            src="https://rutube.ru/play/embed/57a2606b9db40f9c5d6619df60318cdb?p=7CpJln6ZFu-nWfUV7pfmBg&autoplay=false"
+                            loading="lazy"
+                            allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture;"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
             </div>
 
             <div id="guide-ff-firmware" class="guide-content">
@@ -136,27 +523,18 @@
                     <h3 style="margin-top:0;">Прошивка FlashForge</h3>
                     <label>Инструкция:</label>
                     <ul style="font-size:14px; padding-left:20px; line-height:1.6;">
-                        <li>Скачайте файл прошивки (формат <b>.tgz</b>)</li>
-                        <li>Отформатируйте USB-флешку в <b>FAT32</b></li>
-                        <li>Скопируйте файл в корень флешки</li>
-                        <li>Вставьте флешку в <b>выключенный</b> принтер</li>
-                        <li>Включите принтер и ждите завершения</li>
+                        <li>Скачайте файл прошивки (раздел "Прошивки", формат <b>.tgz</b>)</li>
+                        <li>Отформатируйте флешку в <b>FAT32</b></li>
+                        <li>Закиньте файл <b>.tgz</b> в корень флешки</li>
+                        <li>Вставьте в <b>выключенный</b> принтер</li>
+                        <li>Включите принтер</li>
                     </ul>
-                    <div style="background:rgba(255,69,58,0.1); padding:10px; border-radius:10px; border:1px solid var(--danger-color); font-size:12px; text-align:center;">
-                        ⚠️ <b>НЕ ВЫКЛЮЧАЙТЕ ПРИНТЕР</b> до окончания процесса!
-                    </div>
-                    <label style="margin-top:15px;">Что сделать после:</label>
-                    <p style="font-size:13px; color:#ccc;">Вынуть флешку → Перезагрузить → Сброс настроек → Калибровка стола → Настройка Z-offset.</p>
-                    
-                    <label>Возможные ошибки:</label>
-                    <div class="status-box status-error" style="font-size:13px;">
-                        • <b>Не видит файл:</b> Проверьте формат флешки (нужен FAT32) или замените флешку.<br>
-                        • <b>Завис:</b> Если прогресс не идет более 20 минут — перезапуск (бывает редко).
-                    </div>
-
-                    <label>Видео-гайд (с 35-й секунды):</label>
+                    <p style="font-size:14px; text-align:center; color:var(--warning-color); font-weight:bold;">Жди окончания (НЕ ВЫКЛЮЧАТЬ)</p>
+                    <label>После обновления:</label>
+                    <p style="font-size:13px; color:#ccc;">— вынуть флешку<br>— перезагрузить принтер<br>— сброс настроек<br>— калибровка стола<br>— настройка Z-offset</p>
+                    <label>Видео-инструкция:</label>
                     <div class="video-container">
-                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239017&hd=2&t=35s" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
+                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239017&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -164,14 +542,20 @@
             <div id="guide-zoffset" class="guide-content">
                 <div class="back-btn" onclick="showCategory('cat-flashforge')">← К списку FF</div>
                 <div class="container-box">
-                    <h3>Настройка Z-offset</h3>
-                    <p style="font-size:14px;">Z-offset — расстояние между соплом и столом.</p>
+                    <h3 style="margin-top:0;">Настройка Z-offset</h3>
+                    <p style="font-size:14px;">Расстояние между соплом и столом.</p>
+                    <label>Настройка:</label>
+                    <ol style="font-size:14px; padding-left:20px; line-height:1.5;">
+                        <li>Запусти печать первого слоя</li>
+                        <li>Во время печати меняй Z-offset</li>
+                    </ol>
                     <label>Как понять:</label>
-                    <div style="font-size:13px; margin-bottom:10px;">
+                    <div style="font-size:13px; margin-bottom:15px; line-height:1.6;">
                         <b style="color:var(--success-color);">ИДЕАЛ:</b> Линии сплющены, нет щелей.<br>
-                        <b style="color:var(--warning-color);">ВЫСОКО:</b> Линии круглые, не липнет.<br>
-                        <b style="color:var(--danger-color);">НИЗКО:</b> Сопло скребёт, пластик мажется.
+                        <b style="color:var(--warning-color);">Слишком высоко:</b> Линии круглые, не липнет.<br>
+                        <b style="color:var(--danger-color);">Слишком низко:</b> Сопло скребёт, пластик "мазывается".
                     </div>
+                    <label>Видео часть 1:</label>
                     <div class="video-container">
                         <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239019&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                     </div>
@@ -179,25 +563,29 @@
             </div>
         </div>
 
-        <div id="page-settings" class="page">
+        <!-- Главные настройки (заглушка) -->
+        <div id="page-main-settings" class="page">
             <div class="container-box">
-                <h2>Настройки</h2>
-                <label>Принтер</label><select id="edit-printer-select" onchange="saveSelection()"></select>
-                <div class="row" style="margin-bottom:25px;"><button style="background:#545456; color:white;" onclick="showEditor('printer', true)">Изм.</button><button style="background:#3a3a3c; color:white;" onclick="showEditor('printer', null)">+</button><button style="background:var(--danger-color); color:white;" onclick="deleteItem('printer')">Удл.</button></div>
-                <label>Филамент</label><select id="edit-filament-select" onchange="saveSelection()"></select>
-                <div class="row"><button style="background:#545456; color:white;" onclick="showEditor('filament', true)">Изм.</button><button style="background:#3a3a3c; color:white;" onclick="showEditor('filament', null)">+</button><button style="background:var(--danger-color); color:white;" onclick="deleteItem('filament')">Удл.</button></div>
+                <div class="back-btn" onclick="switchPage('page-main', null)">← На главную</div>
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 64px; margin-bottom: 20px;">⚙️</div>
+                    <h2 style="margin-bottom: 15px;">Настройки</h2>
+                    <p style="color: #8e8e93; font-size: 16px;">Скоро здесь появятся дополнительные настройки</p>
+                    <button class="btn-main" style="margin-top: 30px;" onclick="switchPage('page-main', null)">Вернуться на главную</button>
+                </div>
             </div>
         </div>
 
+        <!-- Страница редактора (для добавления/изменения) -->
         <div id="editor-scene" class="page">
-            <div class="container-box"><h2 id="editor-title">Редактор</h2><div id="editor-fields"></div><button style="background:var(--success-color); color:white;" onclick="saveEditor()">Сохранить</button><button style="background:#3a3a3c; color:white;" onclick="switchPage('page-settings', document.querySelector('.tab-item:last-child'))">Отмена</button></div>
+            <div class="container-box">
+                <div class="back-btn" onclick="switchPage('page-manage', null)">← Назад</div>
+                <h2 id="editor-title">Редактор</h2>
+                <div id="editor-fields"></div>
+                <button class="btn-success" onclick="saveEditor()">Сохранить</button>
+                <button class="btn-secondary" onclick="switchPage('page-manage', null)">Отмена</button>
+            </div>
         </div>
-    </div>
-
-    <div class="tab-bar">
-        <div class="tab-item active" onclick="switchPage('page-calc', this)"><div class="tab-icon">🖨</div><div>Расчет</div></div>
-        <div class="tab-item" onclick="switchPage('page-guides', this)"><div class="tab-icon">📚</div><div>Гайды</div></div>
-        <div class="tab-item" onclick="switchPage('page-settings', this)"><div class="tab-icon">⚙️</div><div>Опции</div></div>
     </div>
 
 <script>
@@ -211,106 +599,214 @@
 
     function switchPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
-        if (el) el.classList.add('active');
-        showCategory('main'); 
+        
+        if (pageId === 'page-guides') {
+            showCategory('main');
+        }
+        if (pageId === 'page-calc') {
+            updateUI();
+        }
+        if (pageId === 'page-manage') {
+            updateManageLists();
+        }
+    }
+    
+    function showMainSettings() {
+        switchPage('page-main-settings', null);
+    }
+    
+    function updateManageLists() {
+        // Обновляем список принтеров
+        const printersDiv = document.getElementById('printers-list');
+        if (printersDiv) {
+            printersDiv.innerHTML = '';
+            data.printers.forEach((p, i) => {
+                const selectedClass = (i === data.currentPrinterIndex) ? 'selected' : '';
+                printersDiv.innerHTML += `
+                    <div class="list-item ${selectedClass}" onclick="selectPrinter(${i})">
+                        <div class="list-item-info">
+                            <div class="list-item-name">${p.name}</div>
+                            <div class="list-item-desc">${p.power} Вт | ${p.specs}</div>
+                        </div>
+                        <button class="btn-secondary" style="width: auto; padding: 8px 16px; margin: 0;" onclick="event.stopPropagation(); showEditor('printer', true, ${i})">✏️</button>
+                    </div>
+                `;
+            });
+        }
+        
+        // Обновляем список филаментов
+        const filamentsDiv = document.getElementById('filaments-list');
+        if (filamentsDiv) {
+            filamentsDiv.innerHTML = '';
+            data.filaments.forEach((f, i) => {
+                const selectedClass = (i === data.currentFilamentIndex) ? 'selected' : '';
+                filamentsDiv.innerHTML += `
+                    <div class="list-item ${selectedClass}" onclick="selectFilament(${i})">
+                        <div class="list-item-info">
+                            <div class="list-item-name">${f.type}</div>
+                            <div class="list-item-desc">${f.cost_per_kg} руб/кг | плотность ${f.density} г/см³</div>
+                        </div>
+                        <button class="btn-secondary" style="width: auto; padding: 8px 16px; margin: 0;" onclick="event.stopPropagation(); showEditor('filament', true, ${i})">✏️</button>
+                    </div>
+                `;
+            });
+        }
+    }
+    
+    function selectPrinter(index) {
+        data.currentPrinterIndex = index;
+        saveToStorage();
+        updateManageLists();
+    }
+    
+    function selectFilament(index) {
+        data.currentFilamentIndex = index;
+        saveToStorage();
+        updateManageLists();
     }
 
     function showCategory(catId) {
         document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('active'));
-        document.getElementById('guide-categories').style.display = 'none';
-        if (catId === 'main') {
-            document.getElementById('guide-categories').style.display = 'block';
+        const categoriesDiv = document.getElementById('guide-categories');
+        if (categoriesDiv) {
+            if (catId === 'main') {
+                categoriesDiv.style.display = 'block';
+            } else {
+                categoriesDiv.style.display = 'none';
+                const target = document.getElementById(catId);
+                if (target) target.classList.add('active');
+            }
         } else {
-            document.getElementById(catId).classList.add('active');
+            if (catId !== 'main') {
+                const target = document.getElementById(catId);
+                if (target) target.classList.add('active');
+            }
         }
     }
 
     function openGuide(guideId) {
         document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('active'));
-        document.getElementById(guideId).classList.add('active');
+        const target = document.getElementById(guideId);
+        if (target) target.classList.add('active');
     }
 
     function loadFromStorage() {
-        const saved = localStorage.getItem('3d_hub_v7_final');
+        const saved = localStorage.getItem('3d_hub_v12_full');
         if (saved) data = JSON.parse(saved);
         updateUI();
     }
 
     function saveToStorage() {
-        localStorage.setItem('3d_hub_v7_final', JSON.stringify(data));
+        localStorage.setItem('3d_hub_v12_full', JSON.stringify(data));
         updateUI();
+        updateManageLists();
     }
 
     function updateUI() {
         const fSelect = document.getElementById('filament-select');
-        const fEditSelect = document.getElementById('edit-filament-select');
-        fSelect.innerHTML = ''; fEditSelect.innerHTML = '';
-        data.filaments.forEach((f, i) => {
-            fSelect.innerHTML += `<option value="${i}">${f.type} (${f.cost_per_kg} руб.)</option>`;
-            fEditSelect.innerHTML += `<option value="${i}">${f.type}</option>`;
-        });
-        fSelect.value = data.currentFilamentIndex;
-        fEditSelect.value = data.currentFilamentIndex;
+        if (fSelect) {
+            fSelect.innerHTML = '';
+            data.filaments.forEach((f, i) => {
+                fSelect.innerHTML += `<option value="${i}">${f.type} (${f.cost_per_kg} руб/кг)</option>`;
+            });
+            fSelect.value = data.currentFilamentIndex;
+        }
 
         const pEditSelect = document.getElementById('edit-printer-select');
-        pEditSelect.innerHTML = '';
-        data.printers.forEach((p, i) => { pEditSelect.innerHTML += `<option value="${i}">${p.name}</option>`; });
-        pEditSelect.value = data.currentPrinterIndex;
+        if (pEditSelect) {
+            pEditSelect.innerHTML = '';
+            data.printers.forEach((p, i) => { 
+                pEditSelect.innerHTML += `<option value="${i}">${p.name} (${p.power} Вт)</option>`; 
+            });
+            pEditSelect.value = data.currentPrinterIndex;
+        }
 
         const p = data.printers[data.currentPrinterIndex];
-        document.getElementById('printer-display').innerText = `${p.name} | ${p.power}W | ${p.specs}`;
-        document.getElementById('elec-price').value = data.lastElectricityCost;
+        const pDisp = document.getElementById('printer-display');
+        if (pDisp && p) pDisp.innerText = `🔧 Текущий: ${p.name} | ${p.power} Вт | ${p.specs}`;
+        
+        const ePrice = document.getElementById('elec-price');
+        if (ePrice) ePrice.value = data.lastElectricityCost;
     }
 
     function saveSelection() {
-        data.currentFilamentIndex = parseInt(document.getElementById('filament-select').value) || 0;
-        data.currentPrinterIndex = parseInt(document.getElementById('edit-printer-select').value) || 0;
+        const filamentSelect = document.getElementById('filament-select');
+        if (filamentSelect) {
+            data.currentFilamentIndex = parseInt(filamentSelect.value) || 0;
+        }
+        const printerEditSelect = document.getElementById('edit-printer-select');
+        if (printerEditSelect) {
+            data.currentPrinterIndex = parseInt(printerEditSelect.value) || 0;
+        }
         saveToStorage();
     }
 
     let currentEditMode = null, currentEditIndex = null;
-    function showEditor(mode, edit) {
+    function showEditor(mode, edit, index = null) {
         currentEditMode = mode;
-        currentEditIndex = edit ? (mode === 'printer' ? data.currentPrinterIndex : data.currentFilamentIndex) : null;
-        switchPage('editor-scene');
+        if (edit && index !== null) {
+            currentEditIndex = index;
+        } else if (edit) {
+            currentEditIndex = (mode === 'printer') ? data.currentPrinterIndex : data.currentFilamentIndex;
+        } else {
+            currentEditIndex = null;
+        }
+        switchPage('editor-scene', null);
         const fields = document.getElementById('editor-fields');
         fields.innerHTML = '';
         if (mode === 'printer') {
-            const item = edit ? data.printers[currentEditIndex] : {name:'', power:'', specs:''};
-            fields.innerHTML = `<label>Имя</label><input id="e1" value="${item.name}"><label>Вт</label><input type="number" id="e2" value="${item.power}"><label>Размер</label><input id="e3" value="${item.specs}">`;
+            const item = (currentEditIndex !== null) ? data.printers[currentEditIndex] : {name:'', power:'', specs:''};
+            fields.innerHTML = `<label>Название принтера</label><input id="e1" value="${item.name}" placeholder="Например: Bambu Lab X1C"><label>Мощность (Вт)</label><input type="number" id="e2" value="${item.power}" placeholder="300"><label>Размер стола</label><input id="e3" value="${item.specs}" placeholder="256x256x256">`;
         } else {
-            const item = edit ? data.filaments[currentEditIndex] : {type:'', cost_per_kg:'', density:''};
-            fields.innerHTML = `<label>Тип</label><input id="e1" value="${item.type}"><label>Цена/кг</label><input type="number" id="e2" value="${item.cost_per_kg}"><label>Плотность</label><input id="e3" value="${item.density || 1.24}">`;
+            const item = (currentEditIndex !== null) ? data.filaments[currentEditIndex] : {type:'', cost_per_kg:'', density:''};
+            fields.innerHTML = `<label>Тип филамента</label><input id="e1" value="${item.type}" placeholder="PLA, PETG, ABS..."><label>Цена за кг (руб)</label><input type="number" id="e2" value="${item.cost_per_kg}" placeholder="1200"><label>Плотность (г/см³)</label><input id="e3" value="${item.density || 1.24}" placeholder="1.24">`;
         }
     }
 
     function saveEditor() {
-        const v1 = document.getElementById('e1').value, v2 = parseFloat(document.getElementById('e2').value), v3 = document.getElementById('e3').value;
+        const v1 = document.getElementById('e1').value;
+        const v2 = parseFloat(document.getElementById('e2').value);
+        const v3 = document.getElementById('e3').value;
         if (currentEditMode === 'printer') {
             const obj = { name: v1, power: v2, specs: v3 };
-            if (currentEditIndex !== null) data.printers[currentEditIndex] = obj; else data.printers.push(obj);
+            if (currentEditIndex !== null) data.printers[currentEditIndex] = obj;
+            else data.printers.push(obj);
         } else {
             const obj = { type: v1, cost_per_kg: v2, density: parseFloat(v3) };
-            if (currentEditIndex !== null) data.filaments[currentEditIndex] = obj; else data.filaments.push(obj);
+            if (currentEditIndex !== null) data.filaments[currentEditIndex] = obj;
+            else data.filaments.push(obj);
         }
         saveToStorage();
-        switchPage('page-settings', document.querySelector('.tab-item:last-child'));
+        switchPage('page-manage', null);
     }
 
     function deleteItem(mode) {
         const list = mode === 'printer' ? data.printers : data.filaments;
         if (list.length > 1) {
-            list.splice(mode === 'printer' ? data.currentPrinterIndex : data.currentFilamentIndex, 1);
+            const idx = mode === 'printer' ? data.currentPrinterIndex : data.currentFilamentIndex;
+            list.splice(idx, 1);
+            if (mode === 'printer') {
+                if (data.currentPrinterIndex >= list.length) data.currentPrinterIndex = list.length - 1;
+            } else {
+                if (data.currentFilamentIndex >= list.length) data.currentFilamentIndex = list.length - 1;
+            }
             saveToStorage();
+            updateManageLists();
+        } else {
+            alert(`Нельзя удалить последний ${mode === 'printer' ? 'принтер' : 'филамент'}`);
         }
     }
 
     function calculate() {
-        const w = parseFloat(document.getElementById('weight').value) || 0;
-        const h = parseFloat(document.getElementById('hours').value) || 0;
-        const m = parseFloat(document.getElementById('mins').value) || 0;
+        const quantity = parseInt(document.getElementById('quantity').value) || 1;
+        const weightOne = parseFloat(document.getElementById('weight').value) || 0;
+        const totalWeight = weightOne * quantity;
+        
+        const hours = parseFloat(document.getElementById('hours').value) || 0;
+        const minutes = parseFloat(document.getElementById('mins').value) || 0;
+        const totalTimeHours = (hours + minutes / 60) * quantity;
+        
         const elecPrice = parseFloat(document.getElementById('elec-price').value) || 0;
         const extra = parseFloat(document.getElementById('extra-cost').value) || 0;
         const amortPerc = parseFloat(document.getElementById('amort-perc').value) || 0;
@@ -320,16 +816,32 @@
 
         const p = data.printers[data.currentPrinterIndex];
         const f = data.filaments[data.currentFilamentIndex];
-        const costMat = (w / 1000) * f.cost_per_kg;
-        const costElec = (p.power * (h + m/60) / 1000) * elecPrice;
-        const total = (costMat + costElec + extra) * (1 + amortPerc/100);
+        
+        const costMat = (totalWeight / 1000) * f.cost_per_kg;
+        const costElec = (p.power * totalTimeHours / 1000) * elecPrice;
+        const baseTotal = costMat + costElec + extra;
+        const amortAmount = baseTotal * (amortPerc / 100);
+        const total = baseTotal + amortAmount;
+
+        const costPerUnit = total / quantity;
+        const recommendedPricePerUnit = costPerUnit * 3;
+        const recommendedTotal = total * 3;
 
         const res = document.getElementById('result');
         res.style.display = 'block';
         res.innerHTML = `
-            <div style="font-size:24px; font-weight:bold;">${total.toFixed(2)} руб.</div>
-            <div style="font-size:13px; color:#8e8e93;">Пластик: ${costMat.toFixed(2)} руб. | Энергия: ${costElec.toFixed(2)} руб.</div>
-            <div class="sale-price">Цена продажи (x3):<br>${(total * 3).toFixed(0)} руб.</div>
+            <div style="font-size:28px; font-weight:bold; color: var(--accent-color);">${total.toFixed(2)} руб.</div>
+            <div style="font-size:13px; color:#8e8e93; margin-top: 5px;">📦 За ${quantity} шт. (вес: ${totalWeight.toFixed(1)} г, время: ${totalTimeHours.toFixed(2)} ч)</div>
+            <div style="font-size:13px; color:#8e8e93; margin-top: 5px;">🧵 Пластик: ${costMat.toFixed(2)} руб. | ⚡ Энергия: ${costElec.toFixed(2)} руб. | 💰 Доп.: ${extra.toFixed(2)} руб. | 📊 Амортизация (${amortPerc}%): ${amortAmount.toFixed(2)} руб.</div>
+            <div style="margin-top: 15px; padding-top: 12px; border-top: 1px solid #48484a;">
+                <div style="font-size: 15px; font-weight: bold; color: #8e8e93;">Себестоимость 1 модели:</div>
+                <div style="font-size: 22px; font-weight: bold; color: var(--accent-color);">${costPerUnit.toFixed(2)} руб.</div>
+            </div>
+            <div style="margin-top: 15px; padding-top: 12px; border-top: 1px solid #48484a;">
+                <div style="font-size: 15px; font-weight: bold; color: var(--success-color);">💰 Рекомендованная цена (x3):</div>
+                <div style="font-size: 18px; font-weight: bold;">${recommendedTotal.toFixed(0)} руб. (за ${quantity} шт.)</div>
+                <div style="font-size: 18px; font-weight: bold; margin-top: 6px; color: var(--success-color);">${recommendedPricePerUnit.toFixed(0)} руб. (за 1 шт.)</div>
+            </div>
         `;
         res.scrollIntoView({behavior:'smooth'});
     }
