@@ -7,15 +7,9 @@
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <style>
         :root {
-            --bg-color: #000000;
-            --card-bg: #1c1c1e;
-            --text-color: #ffffff;
-            --accent-color: #007aff;
-            --danger-color: #ff453a;
-            --success-color: #32d74b;
-            --warning-color: #ff9f0a;
-            --input-bg: #2c2c2e;
-            --nav-bg: #121212;
+            --bg-color: #000000; --card-bg: #1c1c1e; --text-color: #ffffff;
+            --accent-color: #007aff; --danger-color: #ff453a; --success-color: #32d74b;
+            --warning-color: #ff9f0a; --input-bg: #2c2c2e; --nav-bg: #121212;
         }
 
         body {
@@ -43,59 +37,48 @@
         .tab-item.active { color: var(--accent-color); }
         .tab-icon { font-size: 22px; margin-bottom: 4px; }
 
-        /* Общие стили карточек */
+        /* Карточки */
         .container-box { background: var(--card-bg); padding: 20px; border-radius: 20px; box-sizing: border-box; margin-bottom: 15px; }
         h2 { text-align: center; margin-bottom: 25px; font-weight: 600; margin-top: 0; }
-        
-        /* Стили калькулятора */
-        .input-group { margin-bottom: 20px; }
         label { display: block; font-size: 14px; margin-bottom: 8px; color: #8e8e93; }
         input, select {
             width: 100%; height: 44px; padding: 10px 15px; border-radius: 12px;
             border: none; background: var(--input-bg); color: white; font-size: 16px; box-sizing: border-box;
         }
         .row { display: flex; gap: 12px; }
-        .row input, .row button { flex: 1; }
         button {
             width: 100%; height: 50px; margin-top: 10px; border: none;
             border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 16px;
         }
         .btn-main { background-color: var(--accent-color); color: white; }
-        
         .printer-info {
             font-size: 13px; color: var(--accent-color); text-align: center;
             margin-bottom: 20px; background: rgba(0, 122, 255, 0.1); padding: 10px; border-radius: 10px;
         }
         #result { margin-top: 25px; padding: 20px; background: #2c2c2e; border-radius: 16px; line-height: 1.6; }
 
-        /* Стили Гайдов */
+        /* Гайды */
         .guide-item { 
             background: var(--card-bg); padding: 15px; border-radius: 16px; 
             margin-bottom: 12px; display: flex; align-items: center; cursor: pointer;
-            border: 1px solid #333; transition: 0.2s;
+            border: 1px solid #333;
         }
-        .guide-item:active { background: #2c2c2e; }
         .guide-icon-circle { 
-            width: 40px; height: 40px; background: #3a3a3c; border-radius: 50%; 
+            width: 40px; height: 40px; background: #3a3a3c; border-radius: 12px; 
             display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 20px;
         }
-
-        /* Оформление статьи гайда */
         .guide-content { display: none; }
         .guide-content.active { display: block; }
-        .back-btn { color: var(--accent-color); margin-bottom: 15px; cursor: pointer; display: inline-block; }
+        .back-btn { color: var(--accent-color); margin-bottom: 15px; cursor: pointer; display: inline-block; font-weight: 500; }
+        
         .status-box { padding: 12px; border-radius: 12px; margin-bottom: 10px; font-size: 14px; }
-        .status-ideal { background: rgba(50, 215, 75, 0.15); border: 1px solid var(--success-color); color: #d1ffd6; }
-        .status-high { background: rgba(255, 159, 10, 0.15); border: 1px solid var(--warning-color); color: #fff1d6; }
-        .status-low { background: rgba(255, 69, 58, 0.15); border: 1px solid var(--danger-color); color: #ffd6d6; }
+        .status-error { background: rgba(255, 69, 58, 0.15); border: 1px solid var(--danger-color); }
         
         .video-container { 
             position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; 
-            border-radius: 14px; background: #000; margin-bottom: 15px;
+            border-radius: 14px; background: #000; margin: 15px 0;
         }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        
-        .tip-box { background: #3a3a3c; padding: 15px; border-radius: 12px; font-size: 14px; border-left: 4px solid var(--accent-color); }
     </style>
 </head>
 <body>
@@ -104,87 +87,94 @@
         <div id="page-calc" class="page active">
             <div class="container-box">
                 <h2>3D Калькулятор</h2>
-                <div class="input-group">
-                    <label>Филамент</label>
-                    <select id="filament-select" onchange="saveSelection()"></select>
-                </div>
-                <div class="input-group">
-                    <label>Вес модели (г)</label>
-                    <input type="number" id="weight" placeholder="0" inputmode="decimal">
-                </div>
-                <div class="input-group">
-                    <label>Время печати</label>
-                    <div class="row">
-                        <input type="number" id="hours" placeholder="Ч">
-                        <input type="number" id="mins" placeholder="Мин">
-                    </div>
-                </div>
+                <div class="input-group"><label>Филамент</label><select id="filament-select" onchange="saveSelection()"></select></div>
+                <div class="input-group"><label>Вес модели (г)</label><input type="number" id="weight" placeholder="0" inputmode="decimal"></div>
+                <div class="input-group"><label>Время печати</label><div class="row"><input type="number" id="hours" placeholder="Ч"><input type="number" id="mins" placeholder="Мин"></div></div>
                 <div id="printer-display" class="printer-info"></div>
-                <div class="input-group">
-                    <label>Электричество (руб/кВт·ч)</label>
-                    <input type="number" id="elec-price" step="0.1">
-                </div>
-                <div class="input-group">
-                    <label>Доп. расходы / Амортизация (%)</label>
-                    <div class="row">
-                        <input type="number" id="extra-cost" placeholder="Доп. руб" value="0">
-                        <input type="number" id="amort-perc" value="20">
-                    </div>
-                </div>
+                <div class="input-group"><label>Электричество (руб/кВт·ч)</label><input type="number" id="elec-price" step="0.1"></div>
+                <div class="input-group"><label>Амортизация (%)</label><div class="row"><input type="number" id="extra-cost" placeholder="Доп. руб" value="0"><input type="number" id="amort-perc" value="20"></div></div>
                 <button class="btn-main" onclick="calculate()">Рассчитать</button>
                 <div id="result" style="display:none;"></div>
             </div>
         </div>
 
         <div id="page-guides" class="page">
-            <div id="guide-list">
+            <div id="guide-categories">
                 <h2>База знаний</h2>
+                <div class="guide-item" onclick="showCategory('cat-flashforge')">
+                    <div class="guide-icon-circle">⚡</div>
+                    <div><div style="font-weight:bold;">FlashForge</div><div style="font-size:12px; color:#8e8e93;">AD5X / 5M / 5M Pro</div></div>
+                </div>
+                <div class="guide-item" onclick="showCategory('cat-reborn')">
+                    <div class="guide-icon-circle">🐻</div>
+                    <div><div style="font-weight:bold;">Flying Bear</div><div style="font-size:12px; color:#8e8e93;">Reborn 3</div></div>
+                </div>
+            </div>
+
+            <div id="cat-flashforge" class="guide-content">
+                <div class="back-btn" onclick="showCategory('main')">← К выбору принтера</div>
+                <h2>FlashForge Гайды</h2>
+                <div class="guide-item" onclick="openGuide('guide-ff-firmware')">
+                    <div class="guide-icon-circle">💾</div>
+                    <div><div style="font-weight:bold;">Прошивка принтера</div><div style="font-size:12px; color:#8e8e93;">Пошаговое обновление</div></div>
+                </div>
                 <div class="guide-item" onclick="openGuide('guide-zoffset')">
                     <div class="guide-icon-circle">🎯</div>
-                    <div>
-                        <div style="font-weight:bold;">Настройка Z-offset</div>
-                        <div style="font-size:12px; color:#8e8e93;">Самая важная калибровка</div>
+                    <div><div style="font-weight:bold;">Настройка Z-offset</div><div style="font-size:12px; color:#8e8e93;">Идеальный первый слой</div></div>
+                </div>
+            </div>
+
+            <div id="cat-reborn" class="guide-content">
+                <div class="back-btn" onclick="showCategory('main')">← К выбору принтера</div>
+                <h2>Reborn 3 Гайды</h2>
+                <p style="text-align:center; color:#8e8e93;">Раздел скоро будет наполнен...</p>
+            </div>
+
+            <div id="guide-ff-firmware" class="guide-content">
+                <div class="back-btn" onclick="showCategory('cat-flashforge')">← К списку FF</div>
+                <div class="container-box">
+                    <h3 style="margin-top:0;">Прошивка FlashForge</h3>
+                    <label>Инструкция:</label>
+                    <ul style="font-size:14px; padding-left:20px; line-height:1.6;">
+                        <li>Скачайте файл прошивки (формат <b>.tgz</b>)</li>
+                        <li>Отформатируйте USB-флешку в <b>FAT32</b></li>
+                        <li>Скопируйте файл в корень флешки</li>
+                        <li>Вставьте флешку в <b>выключенный</b> принтер</li>
+                        <li>Включите принтер и ждите завершения</li>
+                    </ul>
+                    <div style="background:rgba(255,69,58,0.1); padding:10px; border-radius:10px; border:1px solid var(--danger-color); font-size:12px; text-align:center;">
+                        ⚠️ <b>НЕ ВЫКЛЮЧАЙТЕ ПРИНТЕР</b> до окончания процесса!
+                    </div>
+                    <label style="margin-top:15px;">Что сделать после:</label>
+                    <p style="font-size:13px; color:#ccc;">Вынуть флешку → Перезагрузить → Сброс настроек → Калибровка стола → Настройка Z-offset.</p>
+                    
+                    <label>Возможные ошибки:</label>
+                    <div class="status-box status-error" style="font-size:13px;">
+                        • <b>Не видит файл:</b> Проверьте формат флешки (нужен FAT32) или замените флешку.<br>
+                        • <b>Завис:</b> Если прогресс не идет более 20 минут — перезапуск (бывает редко).
+                    </div>
+
+                    <label>Видео-гайд (с 35-й секунды):</label>
+                    <div class="video-container">
+                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239017&hd=2&t=35s" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
-                </div>
+            </div>
 
             <div id="guide-zoffset" class="guide-content">
-                <div class="back-btn" onclick="closeGuide()">← Назад к списку</div>
+                <div class="back-btn" onclick="showCategory('cat-flashforge')">← К списку FF</div>
                 <div class="container-box">
-                    <h3 style="margin-top:0;">Настройка Z-offset</h3>
-                    <p style="font-size:14px; color:#8e8e93;">Z-offset — это расстояние между кончиком сопла и печатным столом.</p>
-                    
-                    <label>Как настроить:</label>
-                    <ol style="font-size:14px; padding-left:20px; line-height:1.5;">
-                        <li>Запустите печать тестового первого слоя.</li>
-                        <li>Прямо во время печати заходите в меню принтера "BabyStep" или "Z-Offset".</li>
-                        <li>Меняйте значение шагами по 0.01 или 0.05 мм.</li>
-                    </ol>
-
-                    <label>Визуальные признаки:</label>
-                    <div class="status-box status-ideal">
-                        <b>✅ ИДЕАЛ:</b> Линии сплющены, щелей между ними нет, поверхность гладкая.
+                    <h3>Настройка Z-offset</h3>
+                    <p style="font-size:14px;">Z-offset — расстояние между соплом и столом.</p>
+                    <label>Как понять:</label>
+                    <div style="font-size:13px; margin-bottom:10px;">
+                        <b style="color:var(--success-color);">ИДЕАЛ:</b> Линии сплющены, нет щелей.<br>
+                        <b style="color:var(--warning-color);">ВЫСОКО:</b> Линии круглые, не липнет.<br>
+                        <b style="color:var(--danger-color);">НИЗКО:</b> Сопло скребёт, пластик мажется.
                     </div>
-                    <div class="status-box status-high">
-                        <b>⚠️ ВЫСОКО:</b> Линии круглые (как макаронины), не липнут к столу, видны просветы.
-                    </div>
-                    <div class="status-box status-low">
-                        <b>❌ НИЗКО:</b> Сопло скребёт по столу, пластик почти не выходит или "размазывается" прозрачным слоем.
-                    </div>
-
-                    <div class="tip-box" style="margin: 15px 0;">
-                        <b>Лайфхак:</b> Проведите пальцем по напечатанной линии. Если она легко отрывается — сопло слишком высоко.
-                    </div>
-
-                    <label>Видео-инструкции:</label>
                     <div class="video-container">
                         <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239019&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <div class="video-container">
-                        <iframe src="https://vk.com/video_ext.php?oid=-157472376&id=456239020&hd=2" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0" allowfullscreen></iframe>
-                    </div>
-
-                    <p style="font-size:12px; color:var(--danger-color); text-align:center;"><b>Важно:</b> Настраивайте Z-offset только после механического выравнивания углов стола!</p>
                 </div>
             </div>
         </div>
@@ -192,47 +182,22 @@
         <div id="page-settings" class="page">
             <div class="container-box">
                 <h2>Настройки</h2>
-                <label>Принтер</label>
-                <select id="edit-printer-select" onchange="saveSelection()"></select>
-                <div class="row" style="margin-bottom:25px;">
-                    <button style="background:#545456; color:white;" onclick="showEditor('printer', true)">Изм.</button>
-                    <button style="background:#3a3a3c; color:white;" onclick="showEditor('printer', null)">+</button>
-                    <button style="background:var(--danger-color); color:white;" onclick="deleteItem('printer')">Удл.</button>
-                </div>
-
-                <label>Филамент</label>
-                <select id="edit-filament-select" onchange="saveSelection()"></select>
-                <div class="row">
-                    <button style="background:#545456; color:white;" onclick="showEditor('filament', true)">Изм.</button>
-                    <button style="background:#3a3a3c; color:white;" onclick="showEditor('filament', null)">+</button>
-                    <button style="background:var(--danger-color); color:white;" onclick="deleteItem('filament')">Удл.</button>
-                </div>
+                <label>Принтер</label><select id="edit-printer-select" onchange="saveSelection()"></select>
+                <div class="row" style="margin-bottom:25px;"><button style="background:#545456; color:white;" onclick="showEditor('printer', true)">Изм.</button><button style="background:#3a3a3c; color:white;" onclick="showEditor('printer', null)">+</button><button style="background:var(--danger-color); color:white;" onclick="deleteItem('printer')">Удл.</button></div>
+                <label>Филамент</label><select id="edit-filament-select" onchange="saveSelection()"></select>
+                <div class="row"><button style="background:#545456; color:white;" onclick="showEditor('filament', true)">Изм.</button><button style="background:#3a3a3c; color:white;" onclick="showEditor('filament', null)">+</button><button style="background:var(--danger-color); color:white;" onclick="deleteItem('filament')">Удл.</button></div>
             </div>
         </div>
 
         <div id="editor-scene" class="page">
-            <div class="container-box">
-                <h2 id="editor-title">Редактор</h2>
-                <div id="editor-fields"></div>
-                <button style="background:var(--success-color); color:white;" onclick="saveEditor()">Сохранить</button>
-                <button style="background:#3a3a3c; color:white;" onclick="switchPage('page-settings', document.querySelector('.tab-item:last-child'))">Отмена</button>
-            </div>
+            <div class="container-box"><h2 id="editor-title">Редактор</h2><div id="editor-fields"></div><button style="background:var(--success-color); color:white;" onclick="saveEditor()">Сохранить</button><button style="background:#3a3a3c; color:white;" onclick="switchPage('page-settings', document.querySelector('.tab-item:last-child'))">Отмена</button></div>
         </div>
     </div>
 
     <div class="tab-bar">
-        <div class="tab-item active" onclick="switchPage('page-calc', this)">
-            <div class="tab-icon">🖨</div>
-            <div>Расчет</div>
-        </div>
-        <div class="tab-item" onclick="switchPage('page-guides', this)">
-            <div class="tab-icon">📚</div>
-            <div>Гайды</div>
-        </div>
-        <div class="tab-item" onclick="switchPage('page-settings', this)">
-            <div class="tab-icon">⚙️</div>
-            <div>Опции</div>
-        </div>
+        <div class="tab-item active" onclick="switchPage('page-calc', this)"><div class="tab-icon">🖨</div><div>Расчет</div></div>
+        <div class="tab-item" onclick="switchPage('page-guides', this)"><div class="tab-icon">📚</div><div>Гайды</div></div>
+        <div class="tab-item" onclick="switchPage('page-settings', this)"><div class="tab-icon">⚙️</div><div>Опции</div></div>
     </div>
 
 <script>
@@ -249,28 +214,32 @@
         document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         if (el) el.classList.add('active');
-        closeGuide(); // Сбрасываем открытый гайд при смене вкладок
+        showCategory('main'); 
+    }
+
+    function showCategory(catId) {
+        document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('active'));
+        document.getElementById('guide-categories').style.display = 'none';
+        if (catId === 'main') {
+            document.getElementById('guide-categories').style.display = 'block';
+        } else {
+            document.getElementById(catId).classList.add('active');
+        }
     }
 
     function openGuide(guideId) {
-        document.getElementById('guide-list').style.display = 'none';
+        document.querySelectorAll('.guide-content').forEach(c => c.classList.remove('active'));
         document.getElementById(guideId).classList.add('active');
     }
 
-    function closeGuide() {
-        document.querySelectorAll('.guide-content').forEach(g => g.classList.remove('active'));
-        const list = document.getElementById('guide-list');
-        if (list) list.style.display = 'block';
-    }
-
     function loadFromStorage() {
-        const saved = localStorage.getItem('3d_hub_v6_full');
+        const saved = localStorage.getItem('3d_hub_v7_final');
         if (saved) data = JSON.parse(saved);
         updateUI();
     }
 
     function saveToStorage() {
-        localStorage.setItem('3d_hub_v6_full', JSON.stringify(data));
+        localStorage.setItem('3d_hub_v7_final', JSON.stringify(data));
         updateUI();
     }
 
@@ -313,7 +282,7 @@
             fields.innerHTML = `<label>Имя</label><input id="e1" value="${item.name}"><label>Вт</label><input type="number" id="e2" value="${item.power}"><label>Размер</label><input id="e3" value="${item.specs}">`;
         } else {
             const item = edit ? data.filaments[currentEditIndex] : {type:'', cost_per_kg:'', density:''};
-            fields.innerHTML = `<label>Тип</label><input id="e1" value="${item.type}"><label>Цена/кг</label><input type="number" id="e2" value="${item.cost_per_kg}"><label>Плотность</label><input type="number" id="e3" value="${item.density || 1.24}">`;
+            fields.innerHTML = `<label>Тип</label><input id="e1" value="${item.type}"><label>Цена/кг</label><input type="number" id="e2" value="${item.cost_per_kg}"><label>Плотность</label><input id="e3" value="${item.density || 1.24}">`;
         }
     }
 
