@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Hub Pro</title>
+    <title>3D Hub</title>
     <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
     <style>
         :root {
@@ -11,184 +11,165 @@
             --card-bg: #1c1c1e;
             --text-color: #ffffff;
             --accent-color: #007aff;
-            --nav-bg: #121212;
-            --input-bg: #2c2c2e;
+            --danger-color: #ff453a;
             --success-color: #32d74b;
+            --input-bg: #2c2c2e;
+            --nav-bg: #121212;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column;
+            height: 100vh; overflow: hidden;
         }
 
-        /* Контейнер для страниц */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 15px 100px 15px; /* Отступ снизу под навигацию */
-        }
-
-        .page { display: none; width: 100%; max-width: 500px; margin: 0 auto; }
+        .content { flex: 1; overflow-y: auto; padding: 20px 15px 100px 15px; }
+        .page { display: none; width: 100%; max-width: 450px; margin: 0 auto; }
         .page.active { display: block; }
 
-        /* Нижняя навигация */
+        /* Навигация */
         .tab-bar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 70px;
-            background: var(--nav-bg);
-            border-top: 1px solid #333;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: var(--nav-bg); border-top: 1px solid #333;
+            display: flex; justify-content: space-around; align-items: center;
             padding-bottom: env(safe-area-inset-bottom);
         }
-
         .tab-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #8e8e93;
-            text-decoration: none;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center;
+            color: #8e8e93; text-decoration: none; font-size: 11px; cursor: pointer;
         }
-
         .tab-item.active { color: var(--accent-color); }
+        .tab-icon { font-size: 22px; margin-bottom: 4px; }
 
-        .tab-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-        }
-
-        /* Элементы интерфейса */
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-        }
-
-        h2 { margin-top: 0; font-size: 22px; text-align: center; }
-
-        label { display: block; font-size: 13px; color: #8e8e93; margin-bottom: 8px; margin-left: 5px; }
-        
+        /* Стили калькулятора (как были) */
+        .container-box { background: var(--card-bg); padding: 20px; border-radius: 20px; box-sizing: border-box; }
+        h2 { text-align: center; margin-bottom: 25px; font-weight: 600; margin-top: 0; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 14px; margin-bottom: 8px; color: #8e8e93; }
         input, select {
-            width: 100%; height: 46px; background: var(--input-bg);
-            border: none; border-radius: 12px; color: white;
-            padding: 0 15px; font-size: 16px; box-sizing: border-box; margin-bottom: 15px;
+            width: 100%; height: 44px; padding: 10px 15px; border-radius: 12px;
+            border: none; background: var(--input-bg); color: white; font-size: 16px; box-sizing: border-box;
         }
-
-        .row { display: flex; gap: 10px; }
-        .row div { flex: 1; }
-
+        .row { display: flex; gap: 12px; }
+        .row input, .row button { flex: 1; }
         button {
-            width: 100%; height: 50px; border-radius: 14px; border: none;
-            font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s;
+            width: 100%; height: 50px; margin-top: 10px; border: none;
+            border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 16px;
         }
-        button:active { transform: scale(0.98); opacity: 0.8; }
-        .btn-blue { background: var(--accent-color); color: white; }
+        .btn-main { background-color: var(--accent-color); color: white; margin-top: 20px; }
+        .btn-save { background-color: var(--success-color); color: white; }
+        .btn-delete { background-color: var(--danger-color); color: white; }
+        .btn-edit { background-color: #545456; color: white; }
 
-        /* Результаты */
-        #result-box {
-            background: #2c2c2e; padding: 15px; border-radius: 14px; margin-top: 10px;
-            border-left: 4px solid var(--accent-color); display: none;
+        .printer-info {
+            font-size: 13px; color: var(--accent-color); text-align: center;
+            margin-bottom: 20px; background: rgba(0, 122, 255, 0.1); padding: 10px; border-radius: 10px;
         }
-
-        /* Заглушки для гайдов */
-        .guide-card {
-            display: flex; align-items: center; background: var(--card-bg);
-            padding: 15px; border-radius: 14px; margin-bottom: 10px; border: 1px solid #333;
-        }
-        .guide-icon { width: 50px; height: 50px; background: #3a3a3c; border-radius: 10px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 24px;}
+        #result { margin-top: 25px; padding: 20px; background: #2c2c2e; border-radius: 16px; line-height: 1.6; }
+        .sale-price { margin-top: 15px; padding-top: 15px; border-top: 1px solid #48484a; color: var(--success-color); font-size: 18px; font-weight: bold; }
+        
+        /* Стили Гайдов */
+        .guide-card { background: var(--card-bg); padding: 15px; border-radius: 14px; margin-bottom: 12px; display: flex; align-items: center; border: 1px solid #333; }
+        .guide-icon { font-size: 24px; margin-right: 15px; }
     </style>
 </head>
 <body>
 
     <div class="content">
         <div id="page-calc" class="page active">
-            <h2>Калькулятор</h2>
-            <div class="card">
-                <label>Принтер</label>
-                <div id="p-info" style="color: var(--accent-color); font-size: 12px; margin-bottom: 10px; text-align: center;"></div>
-                
-                <label>Филамент</label>
-                <select id="f-select" onchange="updateSelectedFilament()"></select>
-
-                <div class="row">
-                    <div>
-                        <label>Вес (г)</label>
-                        <input type="number" id="weight" placeholder="0" inputmode="decimal">
+            <div class="container-box">
+                <h2>3D Калькулятор</h2>
+                <div class="input-group">
+                    <label>Филамент</label>
+                    <select id="filament-select" onchange="saveSelection()"></select>
+                </div>
+                <div class="input-group">
+                    <label>Вес модели (г)</label>
+                    <input type="number" id="weight" placeholder="0" inputmode="decimal">
+                </div>
+                <div class="input-group">
+                    <label>Время печати</label>
+                    <div class="row">
+                        <input type="number" id="hours" placeholder="Ч">
+                        <input type="number" id="mins" placeholder="Мин">
                     </div>
-                    <div>
-                        <label>Брак (%)</label>
-                        <input type="number" id="fail-rate" value="5">
+                </div>
+                <div id="printer-display" class="printer-info"></div>
+                <div class="input-group">
+                    <label>Электричество (руб/кВт·ч)</label>
+                    <input type="number" id="elec-price" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Доп. расходы / Амортизация (%)</label>
+                    <div class="row">
+                        <input type="number" id="extra-cost" placeholder="Доп. руб" value="0">
+                        <input type="number" id="amort-perc" value="20">
                     </div>
                 </div>
-
-                <label>Время печати</label>
-                <div class="row">
-                    <input type="number" id="hours" placeholder="Ч">
-                    <input type="number" id="mins" placeholder="Мин">
-                </div>
-
-                <button class="btn-blue" onclick="calculate()">Рассчитать стоимость</button>
-
-                <div id="result-box">
-                    <div id="res-total" style="font-size: 24px; font-weight: bold;"></div>
-                    <div id="res-details" style="font-size: 13px; color: #aaa; margin-top: 5px;"></div>
-                    <div id="res-sale" style="margin-top: 15px; color: var(--success-color); font-weight: bold; border-top: 1px solid #444; padding-top: 10px;"></div>
-                </div>
+                <button class="btn-main" onclick="calculate()">Рассчитать</button>
+                <div id="result" style="display:none;"></div>
             </div>
         </div>
 
         <div id="page-guides" class="page">
             <h2>База знаний</h2>
             <div class="guide-card">
-                <div class="guide-icon">🛠</div>
+                <span class="guide-icon">📽</span>
                 <div>
-                    <div style="font-weight: 600;">Калибровка стола</div>
-                    <div style="font-size: 12px; color: #8e8e93;">Пошаговое видео для новичков</div>
+                    <div style="font-weight:bold;">Видео-гайды</div>
+                    <div style="font-size:12px; color:#8e8e93;">Раздел в разработке...</div>
                 </div>
             </div>
             <div class="guide-card">
-                <div class="guide-icon">🔥</div>
+                <span class="guide-icon">🧪</span>
                 <div>
-                    <div style="font-weight: 600;">Сушка пластика</div>
-                    <div style="font-size: 12px; color: #8e8e93;">Таблица температур и времени</div>
+                    <div style="font-weight:bold;">Свойства пластиков</div>
+                    <div style="font-size:12px; color:#8e8e93;">Таблицы температур и усадки</div>
                 </div>
             </div>
-            <p style="text-align: center; color: #444; font-size: 13px;">Раздел наполняется...</p>
         </div>
 
         <div id="page-settings" class="page">
-            <h2>Настройки</h2>
-            <div class="card">
-                <label>Ваш тариф электроэнергии (руб/кВт)</label>
-                <input type="number" id="elec-cost" step="0.1" value="5.75">
-                
-                <p style="font-size: 12px; color: #8e8e93;">Здесь в будущем можно будет добавлять свои принтеры и типы пластика.</p>
-                <button style="background: #3a3a3c; color: white;" onclick="vkBridge.send('VKWebAppJoinGroup', {group_id: 12345678});">Подписаться на обновления</button>
+            <div class="container-box">
+                <h2>Настройки</h2>
+                <label>Принтер</label>
+                <select id="edit-printer-select" onchange="saveSelection()"></select>
+                <div class="row" style="margin-bottom:25px;">
+                    <button class="btn-edit" onclick="showEditor('printer', true)">Изм.</button>
+                    <button style="background:#3a3a3c; color:white;" onclick="showEditor('printer', null)">+</button>
+                    <button class="btn-delete" onclick="deleteItem('printer')">Удл.</button>
+                </div>
+
+                <label>Филамент</label>
+                <select id="edit-filament-select" onchange="saveSelection()"></select>
+                <div class="row">
+                    <button class="btn-edit" onclick="showEditor('filament', true)">Изм.</button>
+                    <button style="background:#3a3a3c; color:white;" onclick="showEditor('filament', null)">+</button>
+                    <button class="btn-delete" onclick="deleteItem('filament')">Удл.</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="editor-scene" class="page">
+            <div class="container-box">
+                <h2 id="editor-title">Редактор</h2>
+                <div id="editor-fields"></div>
+                <button class="btn-save" onclick="saveEditor()">Сохранить</button>
+                <button style="background:#3a3a3c; color:white;" onclick="switchPage('page-settings', document.querySelector('.tab-item:last-child'))">Отмена</button>
             </div>
         </div>
     </div>
 
     <div class="tab-bar">
         <div class="tab-item active" onclick="switchPage('page-calc', this)">
-            <div class="tab-icon">🧮</div>
+            <div class="tab-icon">🖨</div>
             <div>Расчет</div>
         </div>
         <div class="tab-item" onclick="switchPage('page-guides', this)">
-            <div class="tab-icon">📖</div>
+            <div class="tab-icon">📚</div>
             <div>Гайды</div>
         </div>
         <div class="tab-item" onclick="switchPage('page-settings', this)">
@@ -200,60 +181,122 @@
 <script>
     vkBridge.send("VKWebAppInit");
 
-    let appData = {
-        settings: { electricity: 5.75 },
-        printers: [{ name: "AD5X / Reborn 3", power: 650, specs: "220x220" }],
-        filaments: [
-            { name: "PLA", price: 1000 },
-            { name: "PETG", price: 900 },
-            { name: "ABS", price: 1100 }
-        ]
+    let data = {
+        currentPrinterIndex: 0, currentFilamentIndex: 0, lastElectricityCost: 5.5,
+        printers: [{ name: "ad5x/5m/5mpro", power: 650, specs: "220x220x220" }],
+        filaments: [{ type: "PLA", cost_per_kg: 1000, density: 1.24 }, { type: "PETG", cost_per_kg: 900, density: 1.27 }]
     };
 
     function switchPage(pageId, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
-        el.classList.add('active');
+        if (el) el.classList.add('active');
     }
 
-    function init() {
-        const sel = document.getElementById('f-select');
-        appData.filaments.forEach((f, i) => {
-            sel.innerHTML += `<option value="${i}">${f.name} (${f.price} руб.)</option>`;
+    function loadFromStorage() {
+        const saved = localStorage.getItem('3d_hub_data_v5');
+        if (saved) data = JSON.parse(saved);
+        updateUI();
+    }
+
+    function saveToStorage() {
+        localStorage.setItem('3d_hub_data_v5', JSON.stringify(data));
+        updateUI();
+    }
+
+    function updateUI() {
+        const fSelect = document.getElementById('filament-select');
+        const fEditSelect = document.getElementById('edit-filament-select');
+        fSelect.innerHTML = ''; fEditSelect.innerHTML = '';
+        data.filaments.forEach((f, i) => {
+            fSelect.innerHTML += `<option value="${i}">${f.type} (${f.cost_per_kg} руб.)</option>`;
+            fEditSelect.innerHTML += `<option value="${i}">${f.type}</option>`;
         });
-        document.getElementById('p-info').innerText = appData.printers[0].name + " | " + appData.printers[0].power + "W";
+        fSelect.value = data.currentFilamentIndex;
+        fEditSelect.value = data.currentFilamentIndex;
+
+        const pEditSelect = document.getElementById('edit-printer-select');
+        pEditSelect.innerHTML = '';
+        data.printers.forEach((p, i) => { pEditSelect.innerHTML += `<option value="${i}">${p.name}</option>`; });
+        pEditSelect.value = data.currentPrinterIndex;
+
+        const p = data.printers[data.currentPrinterIndex];
+        document.getElementById('printer-display').innerText = `${p.name} | ${p.power}W | ${p.specs}`;
+        document.getElementById('elec-price').value = data.lastElectricityCost;
+    }
+
+    function saveSelection() {
+        data.currentFilamentIndex = parseInt(document.getElementById('filament-select').value) || 0;
+        data.currentPrinterIndex = parseInt(document.getElementById('edit-printer-select').value) || 0;
+        saveToStorage();
+    }
+
+    let currentEditMode = null, currentEditIndex = null;
+    function showEditor(mode, edit) {
+        currentEditMode = mode;
+        currentEditIndex = edit ? (mode === 'printer' ? data.currentPrinterIndex : data.currentFilamentIndex) : null;
+        switchPage('editor-scene');
+        const fields = document.getElementById('editor-fields');
+        fields.innerHTML = '';
+        if (mode === 'printer') {
+            const item = edit ? data.printers[currentEditIndex] : {name:'', power:'', specs:''};
+            fields.innerHTML = `<label>Имя</label><input id="e1" value="${item.name}"><label>Вт</label><input type="number" id="e2" value="${item.power}"><label>Размер</label><input id="e3" value="${item.specs}">`;
+        } else {
+            const item = edit ? data.filaments[currentEditIndex] : {type:'', cost_per_kg:'', density:''};
+            fields.innerHTML = `<label>Тип</label><input id="e1" value="${item.type}"><label>Цена/кг</label><input type="number" id="e2" value="${item.cost_per_kg}"><label>Плотность</label><input type="number" id="e3" value="${item.density || 1.24}">`;
+        }
+    }
+
+    function saveEditor() {
+        const v1 = document.getElementById('e1').value, v2 = parseFloat(document.getElementById('e2').value), v3 = document.getElementById('e3').value;
+        if (currentEditMode === 'printer') {
+            const obj = { name: v1, power: v2, specs: v3 };
+            if (currentEditIndex !== null) data.printers[currentEditIndex] = obj; else data.printers.push(obj);
+        } else {
+            const obj = { type: v1, cost_per_kg: v2, density: parseFloat(v3) };
+            if (currentEditIndex !== null) data.filaments[currentEditIndex] = obj; else data.filaments.push(obj);
+        }
+        saveToStorage();
+        switchPage('page-settings', document.querySelector('.tab-item:last-child'));
+    }
+
+    function deleteItem(mode) {
+        const list = mode === 'printer' ? data.printers : data.filaments;
+        if (list.length > 1) {
+            list.splice(mode === 'printer' ? data.currentPrinterIndex : data.currentFilamentIndex, 1);
+            saveToStorage();
+        }
     }
 
     function calculate() {
         const w = parseFloat(document.getElementById('weight').value) || 0;
         const h = parseFloat(document.getElementById('hours').value) || 0;
         const m = parseFloat(document.getElementById('mins').value) || 0;
-        const fail = parseFloat(document.getElementById('fail-rate').value) || 0;
-        const elec = parseFloat(document.getElementById('elec-cost').value) || 5.75;
+        const elecPrice = parseFloat(document.getElementById('elec-price').value) || 0;
+        const extra = parseFloat(document.getElementById('extra-cost').value) || 0;
+        const amortPerc = parseFloat(document.getElementById('amort-perc').value) || 0;
 
-        const filament = appData.filaments[document.getElementById('f-select').value];
-        const printer = appData.printers[0];
+        data.lastElectricityCost = elecPrice;
+        saveToStorage();
 
-        // Логика расчета
-        const timeDec = h + (m/60);
-        const weightWithFail = w * (1 + fail/100);
-        const costFilament = (weightWithFail / 1000) * filament.price;
-        const costElec = (printer.power * timeDec / 1000) * elec;
-        
-        const total = costFilament + costElec;
-        const sale = total * 3;
+        const p = data.printers[data.currentPrinterIndex];
+        const f = data.filaments[data.currentFilamentIndex];
+        const costMat = (w / 1000) * f.cost_per_kg;
+        const costElec = (p.power * (h + m/60) / 1000) * elecPrice;
+        const total = (costMat + costElec + extra) * (1 + amortPerc/100);
 
-        const box = document.getElementById('result-box');
-        box.style.display = 'block';
-        document.getElementById('res-total').innerText = total.toFixed(2) + " руб.";
-        document.getElementById('res-details').innerHTML = `Пластик: ${costFilament.toFixed(2)} руб. <br> Энергия: ${costElec.toFixed(2)} руб.`;
-        document.getElementById('res-sale').innerText = "Цена продажи (x3): " + sale.toFixed(0) + " руб.";
-        
-        box.scrollIntoView({behavior: 'smooth'});
+        const res = document.getElementById('result');
+        res.style.display = 'block';
+        res.innerHTML = `
+            <div style="font-size:24px; font-weight:bold;">${total.toFixed(2)} руб.</div>
+            <div style="font-size:13px; color:#8e8e93;">Пластик: ${costMat.toFixed(2)} руб. | Энергия: ${costElec.toFixed(2)} руб.</div>
+            <div class="sale-price">Цена продажи (x3):<br>${(total * 3).toFixed(0)} руб.</div>
+        `;
+        res.scrollIntoView({behavior:'smooth'});
     }
 
-    init();
+    window.onload = loadFromStorage;
 </script>
 </body>
 </html>
